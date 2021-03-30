@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import 'Login_Screen.dart';
+import 'loginpage.dart';
 
 // import 'searchDisplay.dart';
 import 'home.dart';
-import 'showdetails.dart';
+import 'nextpage.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: Home());
+        home: LoginPage());
   }
 }

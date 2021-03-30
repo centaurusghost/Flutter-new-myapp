@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:maternuncle/DatabaseHelper.dart';
+import 'package:maternuncle/loginpage.dart';
+import 'package:maternuncle/peoples.dart';
 
 class NextPage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() => new _State();
 }
@@ -32,19 +36,25 @@ class _State extends State<NextPage> {
         body: Center(
           child: FutureBuilder(
               builder: (context, snapshot) {
-                var showData = json.decode(snapshot.data.toString());
-                print(showData);
+                List<Peoples> peoples = snapshot.data;
+                print(peoples);
                 return ListView.builder(
                   itemBuilder: (BuildContext content, int index) {
                     return ListTile(
-                      title: Text(showData[index]['name']),
-                      subtitle: Text(showData[index]['phone']),
+                      onTap: (){
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context)=>LoginPage(editMode:true,person:peoples[index])),
+                        );
+
+                      },
+                      title: Text(peoples[index].name),
+                      subtitle: Text(peoples[index].phone),
                     );
                   },
-                  itemCount: showData == null ? 0 : showData.length,
+                  itemCount: peoples == null ? 0 : peoples.length,
                 );
               },
-              future: readJson()),
+              future: dbHelper.getPeoples()),
 
           // body: Padding(
           //     padding: EdgeInsets.all(10),

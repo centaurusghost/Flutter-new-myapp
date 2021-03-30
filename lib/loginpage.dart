@@ -1,20 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'showdetails.dart';
+import 'package:maternuncle/DatabaseHelper.dart';
+import 'package:maternuncle/peoples.dart';
+import 'nextpage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _State();
+
+  Peoples person;
+  bool editMode = false;
+
+  LoginPage({this.editMode, this.person});
 }
 
 class _State extends State<LoginPage> {
   // bool _isVisible = false;
-  double raw = 0.01, total = 0.02, remaining = 0.01, numOne = 0.03;
-  int numTwo = 1, rawTotal = 2;
-  String totalOne = 'a', totalTwo = 'b';
+  double raw = 0.01,
+      total = 0.02,
+      remaining = 0.01,
+      numOne = 0.03;
+  int numTwo = 1,
+      rawTotal = 2;
+  String totalOne = 'a',
+      totalTwo = 'b';
+
+  @override
+  void initState() {
+    print("dfde");
+    if (widget.editMode) {
+      print("editmode" + widget.editMode.toString());
+      totalController.text = '';
+      timeController.text = '';
+      myController.text = '';
+      nameController.text = widget.person.name;
+      remainingController.text = '';
+      paidController.text = '';
+      phoneController.text = widget.person.phone;
+    }
+  }
 
   String onChanged() {
-    numOne = double.parse(myController.text);
+    numOne = double.parse(myController.text != "" ? myController.text : "0");
     raw = double.parse(timeController.text);
     numTwo = numOne.toInt();
     total = numTwo * raw + (numOne - numTwo) * raw * 100 / 60;
@@ -85,12 +112,12 @@ class _State extends State<LoginPage> {
           backgroundColor: Colors.red,
         ),
         body: new Container(
-            // decoration: BoxDecoration(
-            //   image: DecorationImage(
-            //    image: AssetImage("lib/images/wallp.jpg"),
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //    image: AssetImage("lib/images/wallp.jpg"),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
             child: Padding(
                 padding: EdgeInsets.all(10),
                 child: ListView(children: <Widget>[
@@ -243,8 +270,8 @@ class _State extends State<LoginPage> {
                           height: 50,
                           textColor: Colors.white,
                           color: Colors.blue,
-                          child: Text('Calculate'),
-                          onPressed: () {
+                          child: Text('Save'),
+                          onPressed: () async {
                             String newOne, remainOne;
                             double raw, remain;
                             newOne = onChanged();
@@ -252,6 +279,23 @@ class _State extends State<LoginPage> {
                             raw = double.parse(paidController.text);
                             remain = double.parse(newOne) - raw;
                             remainingController.text = '$remain';
+                            Peoples peoples = new Peoples(
+                                phone: phoneController.text,
+                                name: myController.text);
+                            widget.editMode ? dbHelper.update(peoples)
+                            :dbHelper.save(peoples);
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) =>
+                            NextPage
+                            (
+                            )
+                            )
+                            ,
+                            );
+                            // List<Peoples> list_of_peoples = await dbHelper.getPeoples();
+                            // print("list_of_peoles"+list_of_peoples[0].name.toString());
                           },
                         ),
                         SizedBox(width: 50),
