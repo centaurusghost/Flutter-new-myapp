@@ -34,101 +34,35 @@ class _State extends State<NextPage> {
           backgroundColor: Colors.red,
         ),
         body: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Center(
-              child: FutureBuilder(
-                  builder: (context, snapshot) {
-                    List<Peoples> peoples = snapshot.data;
-                    print(peoples);
-                    return ListView.builder(
-                      itemBuilder: (BuildContext content, int index) {
-                        return ListTile(
-                          onTap: (){
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context)=>LoginPage(editMode:true,person:peoples[index])),
-                            );
-
-                          },
-                          title: Text(peoples[index].name),
-                          subtitle: Text(peoples[index].phone),
-                        );
-                      },
-                      itemCount: peoples == null ? 0 : peoples.length,
-                    );
-                  },
-                  future: dbHelper.getPeoples()),
-
-              // body: Padding(
-              //     padding: EdgeInsets.all(10),
-              //     child: ListView(
-              //       children: <Widget>[
-              //         Container(
-              //           height: 55,
-              //           alignment: Alignment.center,
-              //           padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-              //           child: TextField(
-              //             controller: totalController,
-              //             style: TextStyle(
-              //               fontWeight: FontWeight.w500,
-              //               fontSize: 20,
-              //             ),
-              //            // keyboardType: TextInputType.number,
-              //
-              //             // obscureText: true,
-              //              //controller: passwordController,
-              //             decoration: InputDecoration(
-              //
-              //               border: OutlineInputBorder(),
-              //                 //labelText:
-              //               labelText: 'Name',
-              //              // hintText: myController.text,
-              //             ),
-              //
-              //           ),
-              //         ),
-              //         Container(
-              //           height: 55,
-              //           alignment: Alignment.center,
-              //           padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-              //           child: TextField(
-              //             style: TextStyle(
-              //               fontWeight: FontWeight.w500,
-              //               fontSize: 20,
-              //             ),
-              //             keyboardType: TextInputType.number,
-              //             // obscureText: true,
-              //             //controller: passwordController,
-              //             decoration: InputDecoration(
-              //               border: OutlineInputBorder(),
-              //
-              //               labelText: 'Phone No.',
-              //             ),
-              //
-              //           ),
-              //         ),
-              //
-              //         Container(
-              //             height: 50,
-              //             alignment: Alignment.center,
-              //             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-              //             child: FlatButton(
-              //               textColor: Colors.white,
-              //               color: Colors.blue,
-              //               child: Text('Save'),
-              //               onPressed: () {
-              //
-              //                 // print(nameController.text);
-              //                 // print(passwordController.text);
-              //               },
-              //             )),
-              //       ],
-              //     )));
-            ),
-            RaisedButton(onPressed: (){
+            RaisedButton(child:Text("new User"),onPressed: (){
               Navigator.push(context,
-                MaterialPageRoute(builder: (context)=>LoginPage()),
+                MaterialPageRoute(builder: (context)=>LoginPage(editMode: false,)),
               );
-            })
+            }),
+            // FutureBuilder(
+            //     builder: (context, snapshot) {
+            //       List<Peoples> peoples = snapshot.data;
+            //       print(peoples);
+            //       return ListView.builder(
+            //         itemBuilder: (BuildContext content, int index) {
+            //           return ListTile(
+            //             onTap: (){
+            //               Navigator.push(context,
+            //                 MaterialPageRoute(builder: (context)=>LoginPage(editMode:true,person:peoples[index])),
+            //               );
+            //
+            //             },
+            //             title: Text(peoples[index].name),
+            //             subtitle: Text(peoples[index].phone),
+            //           );
+            //         },
+            //         itemCount: peoples == null ? 0 : peoples.length,
+            //       );
+            //     },
+            //     future: dbHelper.getPeoples()),
+
           ],
         ));
   }
