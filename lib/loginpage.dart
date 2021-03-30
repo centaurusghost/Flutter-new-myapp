@@ -16,14 +16,9 @@ class LoginPage extends StatefulWidget {
 
 class _State extends State<LoginPage> {
   // bool _isVisible = false;
-  double raw = 0.01,
-      total = 0.02,
-      remaining = 0.01,
-      numOne = 0.03;
-  int numTwo = 1,
-      rawTotal = 2;
-  String totalOne = 'a',
-      totalTwo = 'b';
+  double raw = 0.01, total = 0.02, remaining = 0.01, numOne = 0.03;
+  int numTwo = 1, rawTotal = 2;
+  String totalOne = 'a', totalTwo = 'b';
 
   @override
   void initState() {
@@ -112,12 +107,12 @@ class _State extends State<LoginPage> {
           backgroundColor: Colors.red,
         ),
         body: new Container(
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //    image: AssetImage("lib/images/wallp.jpg"),
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+            // decoration: BoxDecoration(
+            //   image: DecorationImage(
+            //    image: AssetImage("lib/images/wallp.jpg"),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             child: Padding(
                 padding: EdgeInsets.all(10),
                 child: ListView(children: <Widget>[
@@ -282,17 +277,13 @@ class _State extends State<LoginPage> {
                             Peoples peoples = new Peoples(
                                 phone: phoneController.text,
                                 name: myController.text);
-                            widget.editMode ? dbHelper.update(peoples)
-                            :dbHelper.save(peoples);
+                            widget.editMode
+                                ? dbHelper.update(peoples)
+                                : dbHelper.save(peoples);
                             Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                            builder: (context) =>
-                            NextPage
-                            (
-                            )
-                            )
-                            ,
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NextPage()),
                             );
                             // List<Peoples> list_of_peoples = await dbHelper.getPeoples();
                             // print("list_of_peoles"+list_of_peoples[0].name.toString());
