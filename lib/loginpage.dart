@@ -274,12 +274,12 @@ class _State extends State<LoginPage> {
                             raw = double.parse(paidController.text);
                             remain = double.parse(newOne) - raw;
                             remainingController.text = '$remain';
-                            Peoples peoples = new Peoples(
+                            Peoples person = new Peoples(
                                 phone: phoneController.text,
                                 name: myController.text);
                             widget.editMode
-                                ? dbHelper.update(peoples)
-                                : dbHelper.save(peoples);
+                                ? dbHelper.update(person)
+                                : dbHelper.save(person);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
