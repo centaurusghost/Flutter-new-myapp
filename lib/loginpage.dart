@@ -275,6 +275,7 @@ class _State extends State<LoginPage> {
                             remain = double.parse(newOne) - raw;
                             remainingController.text = '$remain';
                             Peoples person = new Peoples(
+                                id: widget.person.id,
                                 phone: phoneController.text,
                                 name: myController.text);
                             widget.editMode
