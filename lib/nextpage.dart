@@ -17,14 +17,6 @@ class _State extends State<NextPage> {
   TextEditingController remainingController = TextEditingController();
   TextEditingController totalController = TextEditingController();
 
-  Future<dynamic> readJson() async {
-    String response =
-        await '[{"name":"Bishal","phone":"123"},{"name":"Ozone","phone":"123"}]';
-    response = rootBundle.loadString("assets/database.json") as String;
-
-    return (response);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
