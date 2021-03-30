@@ -44,6 +44,7 @@ class _State extends State<LoginPage> {
           actions: <Widget>[
             new FlatButton(
               child: new Text("Yes"),
+              textColor: Colors.white,
               minWidth: 100,
               color: Colors.red,
               onPressed: () {
@@ -54,6 +55,7 @@ class _State extends State<LoginPage> {
             SizedBox(width:50),
             new FlatButton(
               child: new Text("No"),
+              textColor: Colors.white,
               minWidth: 100,
               color: Colors.red,
               onPressed: () {
