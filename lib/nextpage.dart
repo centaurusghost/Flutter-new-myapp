@@ -36,32 +36,32 @@ class _State extends State<NextPage> {
         body: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            RaisedButton(child:Text("new User"),onPressed: (){
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context)=>LoginPage(editMode: false,)),
-              );
-            }),
-            // FutureBuilder(
-            //     builder: (context, snapshot) {
-            //       List<Peoples> peoples = snapshot.data;
-            //       print(peoples);
-            //       return ListView.builder(
-            //         itemBuilder: (BuildContext content, int index) {
-            //           return ListTile(
-            //             onTap: (){
-            //               Navigator.push(context,
-            //                 MaterialPageRoute(builder: (context)=>LoginPage(editMode:true,person:peoples[index])),
-            //               );
-            //
-            //             },
-            //             title: Text(peoples[index].name),
-            //             subtitle: Text(peoples[index].phone),
-            //           );
-            //         },
-            //         itemCount: peoples == null ? 0 : peoples.length,
-            //       );
-            //     },
-            //     future: dbHelper.getPeoples()),
+            // RaisedButton(child:Text("new User"),onPressed: (){
+            //   Navigator.push(context,
+            //     MaterialPageRoute(builder: (context)=>LoginPage(editMode: false,)),
+            //   );
+            // }),
+            FutureBuilder(
+                builder: (context, snapshot) {
+                  List<Peoples> peoples = snapshot.data;
+                  print(peoples);
+                  return ListView.builder(
+                    itemBuilder: (BuildContext content, int index) {
+                      return ListTile(
+                        onTap: (){
+                          Navigator.push(context,
+                            MaterialPageRoute(builder: (context)=>LoginPage(editMode:true,person:peoples[index])),
+                          );
+
+                        },
+                        title: Text(peoples[index].name),
+                        subtitle: Text(peoples[index].phone),
+                      );
+                    },
+                    itemCount: peoples == null ? 0 : peoples.length,
+                  );
+                },
+                future: dbHelper.getPeoples()),
 
           ],
         ));
