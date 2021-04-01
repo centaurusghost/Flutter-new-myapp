@@ -11,11 +11,20 @@ class MainMenu extends StatefulWidget {
 
 class _State extends State<MainMenu> {
   TextEditingController searchController = TextEditingController();
-   //int counter = 0;
-   //Contact _contact = Contact();
-  // List<Contact> _contacts = [];
+  int index;
+  int i;
+  int _cIndex = 0;
+
+  void _incrementTab(index) {
+    setState(() {
+      _cIndex = index;
+    });
+  }
+  // int counter = 0;
+  List<Contact> _contacts = [];
+  Contact _contact = Contact();
   // DatabaseHelper _dbHelper;
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   @override
   // void initState() {
   //   super.initState();
@@ -25,6 +34,7 @@ class _State extends State<MainMenu> {
   //   _refreshContactList();
   // }
   Widget build(BuildContext context) {
+    //initState();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40,
@@ -57,95 +67,63 @@ class _State extends State<MainMenu> {
                 controller: searchController,
               ),
             ),
-              Container(
-                child: ListView.builder(
-                    padding: EdgeInsets.all(8),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text('ozone'
-                              //  _contacts[index].name.toUpperCase(),
-                            ),
-                            subtitle: Text( 'wagle'
-                               // _contacts[index].phone.toUpperCase(),
-                            ),
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => DataPage()),
-                              );
 
-                            },
-                          ),
-                        ],
-                      );
-                    }
+             Column(
+               children: [
+                 ListTile(
+                     title: Text(_contacts[0].name.toUpperCase())
+                //    //index to pass by making item builder but confused
+                //    leading: Icon(Icons.perm_contact_cal_outlined,
+                //    size: 30,),
+                // title: Text(_contacts[i].name.toUpperCase()
+                // ),
+                //    subtitle: Text(_contacts[i].phone),
+                //    trailing: Icon(Icons.delete),
+                //    onTap: (){},
 
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 487),
-                child: Container(
-                  alignment: Alignment.center,
-                child: Row(
-                  children: [
-                      Column(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => DataPage()),
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                          ),
-                          Text('New'),
-                        ],
-                      ),
-
-
-                      SizedBox(width: 95),
-
-          Column(
-            children: [  IconButton(
-                        onPressed: () {
-                          setState(() {
-                           // searchController
-                          });
-
-                        },
-                        icon: const Icon(Icons.search),
-                      ),
-              Text('Search'),
-
-
-                      ]),
-                      SizedBox(width: 90),
-                    Column(
-                        children: [  IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.menu),
-                        ),
-                          Text('Menu'),
-
-                        ]),
-                    ],
-                  ),
-                ),
-              ),
-
+                 ),
+               ],
+             ),
 
             ],
           ),
         ),
 
-
-
-
       ),
+        bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add),
+                label: 'New',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'New',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu),
+                label: 'New',
+              ),
+
+            ],
+          onTap: (index){
+            _incrementTab(index);
+            switch(index){
+              case 0: Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DataPage()),
+              );
+                 break;
+              case 1: break;
+              case 2: break;
+
+            }
+          },
+          ),
+
+
     );
   }
 
 }
+

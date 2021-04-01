@@ -11,12 +11,12 @@ class DataPage extends StatefulWidget {
 
 class _State extends State<DataPage> {
   int counter = 0;
+  List<Contact> _contacts = [];
 
-  // List<Contact> _contacts = [];
-  // DatabaseHelper _dbHelper;
+  DatabaseHelper _dbHelper;
   Contact _contact = Contact();
-  final _formKey = GlobalKey<FormState>();
-
+ // final _formKey = GlobalKey<FormState>();
+//form key
   @override
   // void initState() {
   //   super.initState();
@@ -114,6 +114,18 @@ class _State extends State<DataPage> {
     );
   }
 
+  //this function to copy  textfield values to contact
+  void saveData() {
+    _contact.name = nameController.text;
+    _contact.phone = phoneController.text;
+    _contact.time = myController.text;
+    _contact.costperhour = timeController.text;
+    _contact.paidamount = paidController.text;
+    _contact.total = totalController.text;
+    _contact.remaining = remainingController.text;
+  }
+
+//this function to show save data dialog before saving to database
   void _showDialogForSaving(BuildContext context) {
 // flutter defined function
     showDialog(
@@ -131,7 +143,9 @@ class _State extends State<DataPage> {
               color: Colors.red,
               onPressed: () {
                 //saving function to database
-                saveToDatabase();
+                saveData();
+                _contacts.add(
+                    _contact); //i dont know what this does,maybe syntax of sqlLite
                 Navigator.of(context).pop();
                 Navigator.push(
                   context,
@@ -154,19 +168,6 @@ class _State extends State<DataPage> {
         );
       },
     );
-  }
-
-  void saveToDatabase() {
-    //get data from textfield and pass to contact
-    //my controller = total time
-    //time controller = cost per hour
-    _contact.name = nameController.text;
-    _contact.phone = phoneController.text;
-    _contact.time = myController.text;
-    _contact.costperhour = timeController.text;
-    _contact.paidamount = paidController.text;
-    _contact.total = totalController.text;
-    _contact.remaining = remainingController.text;
   }
 
   TextEditingController totalController = TextEditingController();
@@ -400,5 +401,8 @@ class _State extends State<DataPage> {
                 ]))));
   }
 
-  _onSubmit() {}
+  _onSubmit() {
+    //  print(_contact.name);
+  }
+//   _refreshContactList() async{
 }

@@ -13,7 +13,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._();
   Database _database;
 
-  Future<Database> get database async{
+  Future<Database> get database async {
     if (_database != null) return _database;
     _database = await _initDatabase();
     return _database;
@@ -41,18 +41,29 @@ class DatabaseHelper {
    ''');
     //for testing only few values are not null or null
   }
+
   Future<int> insertContact(Contact contact) async {
-   Database db = await database;
-  return await db.insert(Contact.tblContact, contact.toMap());
+    Database db = await database;
+    return await db.insert(Contact.tblContact, contact.toMap());
+  }
+
+  Future<int> updateContact(Contact contact) async {
+    Database db = await database;
+    return await db.update(Contact.tblContact, contact.toMap(),
+        where: '${Contact.colId}=?', whereArgs: [contact.id]);
+  }
+
+  Future<int> deleteContact(int id) async {
+    Database db = await database;
+    return await db.delete(Contact.tblContact,
+        where: '${Contact.colId}=?', whereArgs: [id]);
   }
 
   Future<List<Contact>> fetchContact() async {
     Database db = await database;
     List<Map> contacts = await db.query(Contact.tblContact);
     return contacts.length == 0
-        ?[]
-        :contacts.map((e) => Contact.fromMap(e)).toList();
+        ? []
+        : contacts.map((e) => Contact.fromMap(e)).toList();
   }
-
-
 }
