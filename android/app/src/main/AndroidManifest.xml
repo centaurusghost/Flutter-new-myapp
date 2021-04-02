@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.clean_app">
    <application
-        android:label="clean_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Mero Hisab"
+       android:icon="@mipmap/appicon1">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
