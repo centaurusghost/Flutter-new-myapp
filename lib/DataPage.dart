@@ -292,6 +292,7 @@ class _State extends State<DataPage> {
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
+                        LengthLimitingTextInputFormatter(5),
                       ],
                       // obscureText: true,
 

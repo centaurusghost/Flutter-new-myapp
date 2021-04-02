@@ -143,11 +143,11 @@ class _State extends State<MainMenu> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'New',
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu),
-            label: 'New',
+            label: 'Menu',
           ),
         ],
         onTap: (index) {
@@ -160,6 +160,7 @@ class _State extends State<MainMenu> {
               );
               break;
             case 1:
+              searchController.text;
               break;
             case 2:
               break;
