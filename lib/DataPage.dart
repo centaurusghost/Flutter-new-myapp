@@ -15,7 +15,8 @@ class _State extends State<DataPage> {
 
   DatabaseHelper _dbHelper;
   Contact _contact = Contact();
- // final _formKey = GlobalKey<FormState>();
+
+  // final _formKey = GlobalKey<FormState>();
 //form key
   @override
   // void initState() {
@@ -78,6 +79,9 @@ class _State extends State<DataPage> {
     });
   }
 
+// void showDialogForSavedOrNot(BuildContext context, int i){
+//     showDialog(context: context, builder: builder)
+// }
   void _showDialog(BuildContext context) {
 // flutter defined function
     showDialog(
@@ -125,6 +129,38 @@ class _State extends State<DataPage> {
     _contact.remaining = remainingController.text;
   }
 
+  void _save() async {
+    //check edit mode here
+    int result;
+    if (_contact.id != null) {
+      result = await _dbHelper.updateContact(_contact);
+    } else {
+      result = await _dbHelper.insertContact(_contact);
+    }
+    if (result != 0) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text("Notice!!"),
+              backgroundColor: Colors.white,
+              content: Text('Saved Sucessfully'),
+            );
+          });
+    }
+    if (result == 0) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: new Text("Notice!!"),
+              backgroundColor: Colors.white,
+              content: Text('Task Failed Sucessfully'),
+            );
+          });
+    }
+  }
+
 //this function to show save data dialog before saving to database
   void _showDialogForSaving(BuildContext context) {
 // flutter defined function
@@ -144,8 +180,10 @@ class _State extends State<DataPage> {
               onPressed: () {
                 //saving function to database
                 saveData();
-                _contacts.add(
-                    _contact); //i dont know what this does,maybe syntax of sqlLite
+                _save();
+
+                // _contacts.add(
+                //     _contact); //i dont know what this does,maybe syntax of sqlLite
                 Navigator.of(context).pop();
                 Navigator.push(
                   context,

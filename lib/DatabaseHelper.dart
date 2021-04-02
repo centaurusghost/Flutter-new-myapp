@@ -35,8 +35,8 @@ class DatabaseHelper {
      ${Contact.colTime} TEXT NOT NULL ,
      ${Contact.colCostPerHour} TEXT NOT NULL,
      ${Contact.colPaidAmount} TEXT NOT NULL,
-     ${Contact.colTotal} TEXT,
-     ${Contact.colRemaining} TEXT 
+     ${Contact.colTotal} TEXT NOT NULL,
+     ${Contact.colRemaining} TEXT NOT NULL
         ) 
    ''');
     //for testing only few values are not null or null
@@ -66,4 +66,5 @@ class DatabaseHelper {
         ? []
         : contacts.map((e) => Contact.fromMap(e)).toList();
   }
+
 }
