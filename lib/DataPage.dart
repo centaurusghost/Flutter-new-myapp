@@ -439,8 +439,5 @@ class _State extends State<DataPage> {
                 ]))));
   }
 
-  _onSubmit() {
-    //  print(_contact.name);
-  }
 //   _refreshContactList() async{
 }
