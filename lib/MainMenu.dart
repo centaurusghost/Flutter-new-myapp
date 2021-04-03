@@ -24,6 +24,7 @@ class _State extends State<MainMenu> {
 
   void surelyDelete(BuildContext context, Contact contact) async {
     await databaseHelper.deleteContact(contact.id);
+    setState((){});
   }
 
   //shows dialog before deleting
