@@ -148,6 +148,7 @@ class _State extends State<DataPage> {
       // print("contact"+contact);
       result = await helper.insertContact(contact);
     }
+
     // result = await helper.insertContact(contact);
     if (result != 0) {
       showDialog(
