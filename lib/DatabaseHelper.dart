@@ -62,12 +62,14 @@ class DatabaseHelper {
   }
 
   Future<int> insertContact(Contact contact) async {
+    print("insert contact called");
     Database db = await database;
     var result =await db.insert(Contact.tblContact, contact.toMap());
     return result;
   }
 //to update detalis of contatc
   Future<int> updateContact(Contact contact) async {
+    print("update contact called");
     Database db = await database;
      var result =  await db.update(Contact.tblContact, contact.toMap(),
         where: '${Contact.colId}=?', whereArgs: [contact.id]);
@@ -107,3 +109,4 @@ class DatabaseHelper {
   }
 
 }
+final databaseHelper = DatabaseHelper();

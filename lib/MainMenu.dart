@@ -10,10 +10,10 @@ class MainMenu extends StatefulWidget {
 
 class _State extends State<MainMenu> {
   TextEditingController searchController = TextEditingController();
-  int index, count = 0;
+  int index;
   int _cIndex = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
-  List<Contact> contactList;
+  List<Contact> contacts;
   int cout = 0;
 
   void _incrementTab(index) {
@@ -21,12 +21,13 @@ class _State extends State<MainMenu> {
       _cIndex = index;
     });
   }
-  void surelyDelete(BuildContext context, Contact contact ) async{
-     await databaseHelper.deleteContact(contact.id);
+
+  void surelyDelete(BuildContext context, Contact contact) async {
+    await databaseHelper.deleteContact(contact.id);
   }
 
   //shows dialog before deleting
-  void showDeleteDialog(BuildContext context, Contact contact) async{
+  void showDeleteDialog(BuildContext context, Contact contact) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -65,9 +66,6 @@ class _State extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     //fetchContacts();
-    if (contactList == null) {
-      contactList = List<Contact>();
-    }
     //initState();
     return Scaffold(
       appBar: AppBar(
@@ -75,8 +73,15 @@ class _State extends State<MainMenu> {
           centerTitle: true,
           backgroundColor: Colors.red,
           title: Text('Details')),
-      body: fetchContact(),
-
+      body: FutureBuilder<List<Contact>>(
+        future: databaseHelper.fetchContact(),
+        builder: (BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
+          if (!snapshot.hasData) return Container();
+          List<Contact> contacts = snapshot.data;
+          print(contacts);
+          return contactsViewWidget(contacts);
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -112,13 +117,18 @@ class _State extends State<MainMenu> {
     );
   }
 
-  ListView fetchContact() {
+  Widget contactsViewWidget(contacts) {
+    // if (contacts == null) {
+    //   contacts = await databaseHelper.fetchContact();
+    //   print("contact");
+    // }
     //TextStyle titleStyle = Theme.of(context).textTheme.subhead;
-   return ListView.builder(
+    return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: count,
+      itemCount: contacts.length,
       itemBuilder: (BuildContext context, int position) {
+        print("building listview");
         return Card(
           color: Colors.white,
           elevation: 2.0,
@@ -126,12 +136,12 @@ class _State extends State<MainMenu> {
             leading: CircleAvatar(
               child: Icon(Icons.perm_contact_cal),
             ),
-            title: Text(contactList[position].name),
-            subtitle: Text(contactList[position].phone),
+            title: Text(contacts[position].name),
+            subtitle: Text(contacts[position].phone),
             trailing: GestureDetector(
               child: Icon(Icons.delete),
               onTap: () {
-                showDeleteDialog(context, contactList[position]);
+                showDeleteDialog(context, contacts[position]);
               },
             ),
             //i dont know how to pass that editmode = true or false value
@@ -145,6 +155,6 @@ class _State extends State<MainMenu> {
           ),
         );
       },
-     );
+    );
   }
 }

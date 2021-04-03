@@ -11,11 +11,22 @@ class DataPage extends StatefulWidget {
 
 class _State extends State<DataPage> {
   DatabaseHelper helper = DatabaseHelper();
-  Contact contact=Contact();
+  Contact contact = Contact();
   @override
   double raw = 0.01, total = 0.02, remaining = 0.01, numOne = 0.03;
   int numTwo = 1, rawTotal = 2;
   String totalOne = 'a', totalTwo = 'b';
+
+  @override
+  void initState() {
+    // nameController.text = contact.name;
+    // phoneController.text = contact.phone;
+    // myController.text = contact.time;
+    // timeController.text = contact.costperhour;
+    // paidController.text = contact.paidamount;
+    // totalController.text = contact.total;
+    // remainingController.text = contact.remaining;
+  }
 
   String onChanged() {
     //solution for invalid double
@@ -48,7 +59,8 @@ class _State extends State<DataPage> {
     phoneController.text = '';
   }
 
-  void calculateData() { //to calcyulate the data
+  void calculateData() {
+    //to calcyulate the data
     String newOne;
     double raw, remain;
     newOne = onChanged();
@@ -105,16 +117,23 @@ class _State extends State<DataPage> {
   }
 
   //this function to copy  textfield values to contact
-  void saveData(Contact contact) {
-    nameController.text = contact.name;
-    phoneController.text=contact.phone ;
-      myController.text=contact.time;
-      timeController.text=contact.costperhour;
-      paidController.text =contact.paidamount;
-     totalController.text=contact.total;
-    remainingController.text= contact.remaining;
-  }
+  void saveData() {
+    contact.name = nameController.text;
+    contact.phone = phoneController.text;
+    contact.time = myController.text;
+    contact.costperhour = timeController.text;
+    contact.paidamount = paidController.text;
+    contact.total = totalController.text;
+    contact.remaining = remainingController.text;
+    _save();
 
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MainMenu()),
+    );
+    clearEverything();
+  }
 
   void _save() async {
     //check edit mode here
@@ -122,9 +141,10 @@ class _State extends State<DataPage> {
     if (contact.id != null) {
       result = await helper.updateContact(contact);
     } else {
+      // print("contact"+contact);
       result = await helper.insertContact(contact);
     }
-    result = await helper.insertContact(contact);
+    // result = await helper.insertContact(contact);
     if (result != 0) {
       showDialog(
           context: context,
@@ -166,14 +186,7 @@ class _State extends State<DataPage> {
               minWidth: 100,
               color: Colors.red,
               onPressed: () {
-                //saveData(contact); //this line is giving error
-                _save();
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MainMenu()),
-                );
-                clearEverything();
+                saveData(); //this line is giving error
               },
             ),
             SizedBox(width: 50),
@@ -203,12 +216,12 @@ class _State extends State<DataPage> {
   @override
   Widget build(BuildContext context) {
     nameController.text = contact.name;
-    phoneController.text=contact.phone ;
-    myController.text=contact.time;
-    timeController.text=contact.costperhour;
-    paidController.text =contact.paidamount;
-    totalController.text=contact.total;
-    remainingController.text= contact.remaining;
+    phoneController.text = contact.phone;
+    myController.text = contact.time;
+    timeController.text = contact.costperhour;
+    paidController.text = contact.paidamount;
+    totalController.text = contact.total;
+    remainingController.text = contact.remaining;
 
     return Scaffold(
         appBar: AppBar(
