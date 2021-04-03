@@ -3,20 +3,14 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:clean_app/Contact.dart';
-// static const _databaseName = 'ContactData.db';
-// static const _databaseVersion = 1;
-//
-// DatabaseHelper._();
-//
-// static final DatabaseHelper instance = DatabaseHelper._();
-// Database _database;
+
 class DatabaseHelper {
 
   static DatabaseHelper _databaseHelper;
   static const _databaseName = 'ContactData.db';
   static const _databaseVersion = 1;
   static Database _database;
-  String tblContact = 'contact_table';
+  String tblContact = 'contact_table'; //contact table
   String colId = 'id';
   String colName = 'name';
   String colPhone = 'phone';
@@ -72,21 +66,21 @@ class DatabaseHelper {
     var result =await db.insert(Contact.tblContact, contact.toMap());
     return result;
   }
-
+//to update detalis of contatc
   Future<int> updateContact(Contact contact) async {
     Database db = await database;
      var result =  await db.update(Contact.tblContact, contact.toMap(),
         where: '${Contact.colId}=?', whereArgs: [contact.id]);
     return result;
   }
-
+//to delete contact
   Future<int> deleteContact(int id) async {
     Database db = await database;
     var result =  await db.delete(Contact.tblContact,
         where: '${Contact.colId}=?', whereArgs: [id]);
     return result;
   }
-
+//to get count
   Future<int> getCount() async{
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $tblContact');
@@ -94,7 +88,7 @@ class DatabaseHelper {
     return result;
   }
 
-
+//to list all data
   Future<List<Contact>> fetchContact() async {
     Database db = await database;
     List<Map> contacts = await db.query(Contact.tblContact);
@@ -102,6 +96,14 @@ class DatabaseHelper {
         ? []
         : contacts.map((e) => Contact.fromMap(e)).toList();
     return result;
+  }
+  //to search data
+  Future<List<Contact>> searchResults(String userSearch) async {
+    final db = await database;
+    //username or table name to search data??
+    var response = await db.query(tblContact, where: '$colName = ?', whereArgs: [userSearch, userSearch]);
+    List<Contact> list = response.map((c) => Contact.fromMap(c)).toList();
+    return list;
   }
 
 }
