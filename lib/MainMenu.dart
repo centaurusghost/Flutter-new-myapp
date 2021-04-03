@@ -130,6 +130,7 @@ class _State extends State<MainMenu> {
       itemCount: contacts.length,
       itemBuilder: (BuildContext context, int position) {
         print("building listview");
+        var contact = contacts[position];
         return Card(
           color: Colors.white,
           elevation: 2.0,
@@ -137,12 +138,12 @@ class _State extends State<MainMenu> {
             leading: CircleAvatar(
               child: Icon(Icons.perm_contact_cal),
             ),
-            title: Text(contacts[position].name),
-            subtitle: Text(contacts[position].phone),
+            title: Text(contact.name),
+            subtitle: Text(contact.phone),
             trailing: GestureDetector(
               child: Icon(Icons.delete),
               onTap: () {
-                showDeleteDialog(context, contacts[position]);
+                showDeleteDialog(context, contact);
               },
             ),
             //i dont know how to pass that editmode = true or false value
@@ -150,7 +151,7 @@ class _State extends State<MainMenu> {
               //Datapage void _save() it contains edit mode check look once
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DataPage()),
+                MaterialPageRoute(builder: (context) => DataPage(contact:contact)),
               );
             },
           ),

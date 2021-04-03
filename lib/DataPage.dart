@@ -7,25 +7,29 @@ import 'package:clean_app/DatabaseHelper.dart';
 class DataPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _State();
+  Contact contact;
+
+  DataPage({this.contact});
 }
 
 class _State extends State<DataPage> {
   DatabaseHelper helper = DatabaseHelper();
-  Contact contact = Contact();
-  @override
+  Contact contact;
   double raw = 0.01, total = 0.02, remaining = 0.01, numOne = 0.03;
   int numTwo = 1, rawTotal = 2;
   String totalOne = 'a', totalTwo = 'b';
 
   @override
   void initState() {
-    // nameController.text = contact.name;
-    // phoneController.text = contact.phone;
-    // myController.text = contact.time;
-    // timeController.text = contact.costperhour;
-    // paidController.text = contact.paidamount;
-    // totalController.text = contact.total;
-    // remainingController.text = contact.remaining;
+    contact = widget.contact ?? Contact();
+
+    nameController.text = contact.name;
+    phoneController.text = contact.phone;
+    myController.text = contact.time;
+    timeController.text = contact.costperhour;
+    paidController.text = contact.paidamount;
+    totalController.text = contact.total;
+    remainingController.text = contact.remaining;
   }
 
   String onChanged() {
@@ -215,14 +219,6 @@ class _State extends State<DataPage> {
 
   @override
   Widget build(BuildContext context) {
-    nameController.text = contact.name;
-    phoneController.text = contact.phone;
-    myController.text = contact.time;
-    timeController.text = contact.costperhour;
-    paidController.text = contact.paidamount;
-    totalController.text = contact.total;
-    remainingController.text = contact.remaining;
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
