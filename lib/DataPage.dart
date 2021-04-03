@@ -10,29 +10,15 @@ class DataPage extends StatefulWidget {
 }
 
 class _State extends State<DataPage> {
-  int counter = 0;
-  List<Contact> _contacts = [];
-
-  DatabaseHelper _dbHelper;
-  Contact _contact = Contact();
-
-  // final _formKey = GlobalKey<FormState>();
-//form key
+  DatabaseHelper helper = DatabaseHelper();
+  Contact contact=Contact();
   @override
-  // void initState() {
-  //   super.initState();
-  //   setState(() {
-  //     _dbHelper = DatabaseHelper.instance;
-  //   });
-  //   _refreshContactList();
-  // }
-
-  // bool _isVisible = false;
   double raw = 0.01, total = 0.02, remaining = 0.01, numOne = 0.03;
   int numTwo = 1, rawTotal = 2;
   String totalOne = 'a', totalTwo = 'b';
 
   String onChanged() {
+    //solution for invalid double
     if (timeController.text == '') {
       timeController.text = '0';
     }
@@ -62,7 +48,7 @@ class _State extends State<DataPage> {
     phoneController.text = '';
   }
 
-  void calculateData() {
+  void calculateData() { //to calcyulate the data
     String newOne;
     double raw, remain;
     newOne = onChanged();
@@ -73,7 +59,7 @@ class _State extends State<DataPage> {
   }
 
   void fillChanged() {
-    //trigerring widget instantly
+    //to instantly calculate the data
     setState(() {
       calculateData();
     });
@@ -119,24 +105,26 @@ class _State extends State<DataPage> {
   }
 
   //this function to copy  textfield values to contact
-  void saveData() {
-    _contact.name = nameController.text;
-    _contact.phone = phoneController.text;
-    _contact.time = myController.text;
-    _contact.costperhour = timeController.text;
-    _contact.paidamount = paidController.text;
-    _contact.total = totalController.text;
-    _contact.remaining = remainingController.text;
+  void saveData(Contact contact) {
+    nameController.text = contact.name;
+    phoneController.text=contact.phone ;
+      myController.text=contact.time;
+      timeController.text=contact.costperhour;
+      paidController.text =contact.paidamount;
+     totalController.text=contact.total;
+    remainingController.text= contact.remaining;
   }
+
 
   void _save() async {
     //check edit mode here
     int result;
-    if (_contact.id != null) {
-      result = await _dbHelper.updateContact(_contact);
+    if (contact.id != null) {
+      result = await helper.updateContact(contact);
     } else {
-      result = await _dbHelper.insertContact(_contact);
+      result = await helper.insertContact(contact);
     }
+    result = await helper.insertContact(contact);
     if (result != 0) {
       showDialog(
           context: context,
@@ -178,12 +166,8 @@ class _State extends State<DataPage> {
               minWidth: 100,
               color: Colors.red,
               onPressed: () {
-                //saving function to database
-                saveData();
+                //saveData(contact); //this line is giving error
                 _save();
-
-                // _contacts.add(
-                //     _contact); //i dont know what this does,maybe syntax of sqlLite
                 Navigator.of(context).pop();
                 Navigator.push(
                   context,
@@ -218,6 +202,14 @@ class _State extends State<DataPage> {
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = contact.name;
+    phoneController.text=contact.phone ;
+    myController.text=contact.time;
+    timeController.text=contact.costperhour;
+    paidController.text =contact.paidamount;
+    totalController.text=contact.total;
+    remainingController.text= contact.remaining;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,

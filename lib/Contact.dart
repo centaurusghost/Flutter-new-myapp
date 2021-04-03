@@ -21,6 +21,15 @@ class Contact {
       this.paidamount,
       this.total,
       this.remaining});
+  Contact.withId(
+      {this.id,
+        this.name,
+        this.phone,
+        this.time,
+        this.costperhour,
+        this.paidamount,
+        this.total,
+        this.remaining});
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{

@@ -1,6 +1,5 @@
 import 'package:clean_app/DataPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:clean_app/Contact.dart';
 import 'package:clean_app/DatabaseHelper.dart';
 
@@ -13,17 +12,21 @@ class _State extends State<MainMenu> {
   TextEditingController searchController = TextEditingController();
   int index, count = 0;
   int _cIndex = 0;
-  DatabaseHelper _databaseHelper; //i am lil confused here
-  List<Contact> contact;
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  List<Contact> contactList;
+  int cout = 0;
 
   void _incrementTab(index) {
     setState(() {
       _cIndex = index;
     });
   }
+  void surelyDelete(BuildContext context, Contact contact ) async{
+     await databaseHelper.deleteContact(contact.id);
+  }
 
   //shows dialog before deleting
-  void showDeleteDialog(BuildContext context, int x) {
+  void showDeleteDialog(BuildContext context, Contact contact) async{
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -38,7 +41,7 @@ class _State extends State<MainMenu> {
               minWidth: 100,
               color: Colors.red,
               onPressed: () {
-                _databaseHelper.deleteContact(x);
+                surelyDelete(context, contact);
                 Navigator.of(context).pop();
               },
             ),
@@ -49,6 +52,7 @@ class _State extends State<MainMenu> {
               minWidth: 100,
               color: Colors.red,
               onPressed: () {
+                surelyDelete(context, contact);
                 Navigator.of(context).pop();
               },
             ),
@@ -58,15 +62,11 @@ class _State extends State<MainMenu> {
     );
   }
 
-  // void navigateToDataPage(Contact contact, String title){
-  //   Navigator.push(context, MaterialPageRoute(builder: (context){
-  //     return DataPage(contact,);
-  //   }))
-  // }
   @override
   Widget build(BuildContext context) {
-    if (contact == null) {
-      contact = List<Contact>();
+    //fetchContacts();
+    if (contactList == null) {
+      contactList = List<Contact>();
     }
     //initState();
     return Scaffold(
@@ -75,66 +75,8 @@ class _State extends State<MainMenu> {
           centerTitle: true,
           backgroundColor: Colors.red,
           title: Text('Details')),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(10, 5, 10, 15),
-          child: ListView(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 40,
-                child: TextFormField(
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z,a-z, ]')),
-                    LengthLimitingTextInputFormatter(20),
-                  ],
-                  // controller: phoneController,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                  ),
-                  decoration: InputDecoration(
-                    // fillColor: Colors.white, filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'Search Peoples',
-                  ),
-                  controller: searchController,
-                ),
-              ),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: count,
-                itemBuilder: (BuildContext context, int position) {
-                  return Card(
-                    color: Colors.white,
-                    elevation: 2.0,
-                    child: ListTile(
-                      title: Text(contact[position].name),
-                      subtitle: Text(contact[position].phone),
-                      trailing: GestureDetector(
-                        child: Icon(Icons.delete),
-                        onTap: () {
-                          showDeleteDialog(context, position);
-                        },
-                      ),
-                      //i dont know how to pass that editmode = true or false value
-                      onTap: () {
-                        //Datapage void _save() it contains edit mode check look once
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DataPage()),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: fetchContact(),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -159,14 +101,50 @@ class _State extends State<MainMenu> {
                 MaterialPageRoute(builder: (context) => DataPage()),
               );
               break;
-            case 1:
-              searchController.text;
-              break;
-            case 2:
-              break;
+            // case 1:
+            //   searchController.text ;
+            //   break;
+            // case 2:
+            //   break;
           }
         },
       ),
     );
+  }
+
+  ListView fetchContact() {
+    //TextStyle titleStyle = Theme.of(context).textTheme.subhead;
+   return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: count,
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
+            leading: CircleAvatar(
+              child: Icon(Icons.perm_contact_cal),
+            ),
+            title: Text(contactList[position].name),
+            subtitle: Text(contactList[position].phone),
+            trailing: GestureDetector(
+              child: Icon(Icons.delete),
+              onTap: () {
+                showDeleteDialog(context, contactList[position]);
+              },
+            ),
+            //i dont know how to pass that editmode = true or false value
+            onTap: () {
+              //Datapage void _save() it contains edit mode check look once
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DataPage()),
+              );
+            },
+          ),
+        );
+      },
+     );
   }
 }
