@@ -100,13 +100,13 @@ class DatabaseHelper {
     return result;
   }
   //to search data
-  Future<List<Contact>> searchResults(String userSearch) async {
-    final db = await database;
-    //username or table name to search data??
-    var response = await db.query(tblContact, where: '$colName = ?', whereArgs: [userSearch, userSearch]);
-    List<Contact> list = response.map((c) => Contact.fromMap(c)).toList();
-    return list;
-  }
+  // Future<List<Contact>> searchResults(String userSearch) async {
+  //   final db = await database;
+  //   //username or table name to search data??
+  //   var response = await db.query(tblContact, where: '$colName = ?', whereArgs: [userSearch, userSearch]);
+  //   List<Contact> list = response.map((c) => Contact.fromMap(c)).toList();
+  //   return list;
+  // }
 
 }
 final databaseHelper = DatabaseHelper();

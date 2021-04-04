@@ -18,9 +18,13 @@ class _State extends State<DataPage> {
   double raw = 0.01, total = 0.02, remaining = 0.01, numOne = 0.03;
   int numTwo = 1, rawTotal = 2;
   String totalOne = 'a', totalTwo = 'b';
-
+  FocusNode myFocusNode;
   @override
   void initState() {
+
+    super.initState();
+
+    myFocusNode = FocusNode();
     contact = widget.contact ?? Contact();
 
     nameController.text = contact.name;
@@ -32,10 +36,14 @@ class _State extends State<DataPage> {
     remainingController.text = contact.remaining;
   }
 
+
   String onChanged() {
     //solution for invalid double
     if (timeController.text == '') {
       timeController.text = '0';
+    }
+    if (phoneController.text == '') {
+      phoneController.text = '0';
     }
     if (myController.text == '') {
       myController.text = '0';
@@ -84,12 +92,14 @@ class _State extends State<DataPage> {
 // void showDialogForSavedOrNot(BuildContext context, int i){
 //     showDialog(context: context, builder: builder)
 // }
-  void _showDialog(BuildContext context) {
+  void _showDialog(BuildContext context, double wide) {
 // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return Container(
+        width: (wide-200)/2,
+            child: AlertDialog(
           title: new Text("Alert!!"),
           backgroundColor: Colors.white,
           content: new Text("Do you really Want to Clear?"),
@@ -97,25 +107,28 @@ class _State extends State<DataPage> {
             new FlatButton(
               child: new Text("Yes"),
               textColor: Colors.white,
-              minWidth: 100,
+             // minWidth: 80 ,
               color: Colors.red,
               onPressed: () {
                 clearEverything();
                 Navigator.of(context).pop();
               },
             ),
-            SizedBox(width: 50),
+            //SizedBox(width: 50),
+            Container(
+              width: 83,
+            ),
             new FlatButton(
               child: new Text("No"),
               textColor: Colors.white,
-              minWidth: 100,
+             // minWidth: 80,
               color: Colors.red,
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
           ],
-        );
+        ));
       },
     );
   }
@@ -168,19 +181,34 @@ class _State extends State<DataPage> {
             return AlertDialog(
               title: new Text("Notice!!"),
               backgroundColor: Colors.white,
-              content: Text('Task Failed Sucessfully'),
+              content: Text('There was Problem while Saving'),
             );
           });
     }
   }
 
 //this function to show save data dialog before saving to database
-  void _showDialogForSaving(BuildContext context) {
+  void _showDialogForSaving(BuildContext context, double wide) {
 // flutter defined function
+  if(nameController.text=='' || timeController.text=='' || myController.text=='0'|| timeController.text=='0' || myController.text=='0'){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: new Text("Notice!!"),
+          backgroundColor: Colors.white,
+          content: new Text("Cannot save incomplete Data!"));
+
+        }
+
+    );
+  }
+  else {
+    calculateData();
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return ( AlertDialog(
           title: new Text("Notice!!"),
           backgroundColor: Colors.white,
           content: new Text("Do you really Want to Save?"),
@@ -188,26 +216,28 @@ class _State extends State<DataPage> {
             new FlatButton(
               child: new Text("Yes"),
               textColor: Colors.white,
-              minWidth: 100,
+             // minWidth: 80,
               color: Colors.red,
               onPressed: () {
                 saveData(); //this line is giving error
               },
             ),
-            SizedBox(width: 50),
+            Container(
+              width: 83,
+            ),
             new FlatButton(
               child: new Text("No"),
               textColor: Colors.white,
-              minWidth: 100,
+             // minWidth: 100,
               color: Colors.red,
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
           ],
-        );
+        ) );
       },
-    );
+    );}
   }
 
   TextEditingController totalController = TextEditingController();
@@ -217,9 +247,10 @@ class _State extends State<DataPage> {
   TextEditingController remainingController = TextEditingController();
   TextEditingController paidController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    double Width = MediaQuery.of(context).size.width;
+    double Height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -230,6 +261,10 @@ class _State extends State<DataPage> {
             child: Padding(
                 padding: EdgeInsets.all(10),
                 child: ListView(children: <Widget>[
+                  Container(
+                    height: 10,
+
+                  ),
                   Container(
                     height: 58,
                     alignment: Alignment.center,
@@ -281,17 +316,12 @@ class _State extends State<DataPage> {
                     alignment: Alignment.center,
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: TextField(
-                      controller: myController,
-                      // onTap: () {
-                      //   setState(() {
-                      //     calculateData();
-                      //   });
-                      // },
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
                       ),
                       keyboardType: TextInputType.number,
+                      controller: myController,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
                         LengthLimitingTextInputFormatter(5),
@@ -310,11 +340,11 @@ class _State extends State<DataPage> {
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: TextField(
                       controller: timeController,
-                      // onTap: () {
-                      //   setState(() {
-                      //     calculateData();
-                      //   });
-                      // },
+                      onSubmitted: (String) {
+                        setState(() {
+                          calculateData();
+                        });
+                      },
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
@@ -400,7 +430,11 @@ class _State extends State<DataPage> {
                       ),
                     ),
                   ),
-                  Container(
+               Container(
+                 height: 20,
+
+               ),
+               Container(
                     height: 70,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -409,14 +443,14 @@ class _State extends State<DataPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
-                          minWidth: 170,
+                         minWidth: (Width-80)/2,
                           height: 50,
                           textColor: Colors.white,
                           color: Colors.blue,
                           child: Text('Calculate & Save'),
                           onPressed: () {
-                            calculateData();
-                            _showDialogForSaving(context);
+                            _showDialogForSaving(context,Width);
+                            //calculateData();
                             //  new Future.delayed(const Duration(seconds : 5));
                             //fill data
                           },
@@ -426,21 +460,19 @@ class _State extends State<DataPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
-                          minWidth: 170,
+                          minWidth:(Width-80)/2,
                           height: 50,
                           textColor: Colors.white,
                           color: Colors.red,
                           child: Text('Clear'),
                           onPressed: () {
-                            _showDialog(context);
+                            _showDialog(context,Width);
                           },
                         ),
                       ],
                       // padding: EdgeInsets.symmetric(horizontal:12, vertical: 12),
                     ),
-                  )
+                  ),
                 ]))));
   }
-
-//   _refreshContactList() async{
 }
