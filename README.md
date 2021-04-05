@@ -1,6 +1,8 @@
 # maternuncle
 
 A new Flutter application.
+Please dont downlaod from main branch
+Download from clean_app branch.
 
 ## Getting Started
 
