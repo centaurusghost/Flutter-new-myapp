@@ -33,7 +33,9 @@ class _State extends State<MainMenu> {
 
   void surelyDelete(BuildContext context, Contact contact) async {
     await databaseHelper.deleteContact(contact.id);
-    setState((){});
+    setState((){
+      contactsViewWidget(contacts,isSearching);
+    });
   }
   //
   getContactList() async{
@@ -42,25 +44,25 @@ class _State extends State<MainMenu> {
   }
 
   void initState() {
-    super.initState();
-getContactList().then((data) {
-  setState(() {
-    listContact = filteredContact= data;
-  });
-});
-  if(myFocusNode==null){
-    myFocusNode = FocusNode();}
+    getContactList().then((data) {
+      setState(() {
+        listContact = filteredContact= data;
+      });
 
+    });
+    if(myFocusNode==null){
+      myFocusNode = FocusNode();}
+    super.initState();
   }
- void filterContact(value){
+  void filterContact(value){
     //print(listContact.where((xxx) => xxx.name=='tilak').toList(););
-   setState(() {
-     filteredContact = listContact.where((contact) => contact.name.toLowerCase().contains(value.toLowerCase())).toList();
-    // filteredContact = listContact.where((xxx) => xxx.name=='tilak khatri').toList();
-   });
-    }
+    setState(() {
+      filteredContact = listContact.where((contact) => contact.name.toLowerCase().contains(value.toLowerCase())).toList();
+      // filteredContact = listContact.where((xxx) => xxx.name=='tilak khatri').toList();
+    });
+  }
   void dispose() {
-  //  searchController.removeListener(onSearchChanged);
+    //  searchController.removeListener(onSearchChanged);
     searchController.dispose();
     myFocusNode.dispose();
     super.dispose();
@@ -79,7 +81,73 @@ getContactList().then((data) {
   //       }
   // }
 
+  String displayTotal(){
+    double displayTotall=0;
+    for(int i =0; i<=filteredContact.length-1; i++){
+      displayTotall =displayTotall+ double.parse(filteredContact[i].total);
+    }
+    String displayTotals;
+    displayTotals = displayTotall.toString();
+    return displayTotals;
+  }
+  String displayRemaining(){
+    double displayTotall=0;
+    for(int i =0; i<=filteredContact.length-1; i++){
+      displayTotall =displayTotall+ double.parse(filteredContact[i].remaining);
+      // print(displayTotall);
+    }
+    String displayTotals;
+    displayTotals = displayTotall.toString();
+    return displayTotals;
+  }
+  String displayPaid(){
+    double displayTotall=0;
+    for(int i =0; i<=filteredContact.length-1; i++){
+      displayTotall =displayTotall+ double.parse(filteredContact[i].paidamount);
+      // print(displayTotall);
+    }
+    String displayTotals;
+    displayTotals = displayTotall.toString();
+    return displayTotals;
+  }
+  void menuDialog() {
+    showDialog(context: context, builder: (BuildContext context) {
+      return SimpleDialog(
+        title: Text("See Details"),
+        children: [
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Total Customers= '+listContact.length.toString()),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context);
+              //displayTotal();
+            },
+            child: Text('Total Money=  Rs.'+displayTotal()),
+            // child: Text('Total Money=  Rs.'),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('तपाईंले पाएको रकम  =  Rs.'+displayPaid()),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('बाकी उठाउँनु पर्ने =  Rs.'+displayRemaining()),
+          ),
+        ],
 
+      );
+    });
+
+
+  }
 
 
 
@@ -125,13 +193,13 @@ getContactList().then((data) {
 
   @override
   Widget build(BuildContext context) {
-  //bool isSearching = searchController.text.isNotEmpty;
+    //bool isSearching = searchController.text.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
-          toolbarHeight: 40,
+          toolbarHeight: 50,
           centerTitle: true,
-          backgroundColor: Colors.red,
-          title: Text('Details')),
+          backgroundColor: Colors.green,
+          title: Text('नाम खोजी गर्नुहोस ')),
       body: Column(
         children: [
           searchBar(),
@@ -146,7 +214,7 @@ getContactList().then((data) {
             },
           ),
         ],
-       ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -165,17 +233,22 @@ getContactList().then((data) {
         onTap: (index) {
           _incrementTab(index);
           switch (index) {
-            case 0:
+            case 0:{
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => DataPage()),
               );
-              break;
-            case 1:
+              break;}
+
+            case 1:{
               myFocusNode.requestFocus();
-            //   break;
-            // case 2:
-            //   break;
+              break;}
+          //   break;
+            case 2: {menuDialog();
+
+            break;}
+
+            default: {break;}
           }
         },
       ),
@@ -196,7 +269,10 @@ getContactList().then((data) {
           elevation: 2.0,
           child: ListTile(
             leading: CircleAvatar(
-              child: Icon(Icons.perm_contact_cal),
+              //child: Icon(Icons.perm_contact_cal),
+              child: Text(contact.name[0].toUpperCase(),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
             ),
             title: Text(contact.name),
             subtitle: Text(contact.remaining),

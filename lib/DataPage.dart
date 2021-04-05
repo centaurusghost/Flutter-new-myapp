@@ -255,7 +255,7 @@ class _State extends State<DataPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text('Data and Money'),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.pinkAccent,
         ),
         body: new Container(
             child: Padding(
