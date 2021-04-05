@@ -5,6 +5,7 @@ import 'package:clean_app/DatabaseHelper.dart';
 import 'package:flutter/services.dart';
 
 class MainMenu extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() => new _State();
 }
@@ -17,9 +18,11 @@ class _State extends State<MainMenu> {
   int _cIndex = 0;
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<Contact> contacts;
-  List<Contact> contactsFiltered =[];
   int cout = 0;
   FocusNode myFocusNode;
+  List <Contact> listContact ;
+  List <Contact> filteredContact;
+  bool isSearching = false;
 
 
   void _incrementTab(index) {
@@ -33,51 +36,41 @@ class _State extends State<MainMenu> {
     setState((){});
   }
   //
-  filterContacts(){
-    print(searchController.text);
-    // if(searchController.text.isNotEmpty){
-    //   contacts.retainWhere((contacts) {
-    //     String searchTerm = searchController.text.toLowerCase();
-    //     String contactName = contacts.name.toLowerCase();
-    //     return contactName.contains(searchTerm);
-    //   });
-    //
-    //   setState(() {
-    //     contactsFiltered = contacts;
-    //   });
-    // }
-
+  getContactList() async{
+    var databaseFetch = await databaseHelper.fetchContact();
+    return databaseFetch;
   }
 
   void initState() {
     super.initState();
-    //databaseHelper.fetchContact();
-    getAllContacts();
-    searchController.addListener(() {
-      //filterContacts();
-    });
+getContactList().then((data) {
+  setState(() {
+    listContact = filteredContact= data;
+  });
+});
   if(myFocusNode==null){
     myFocusNode = FocusNode();}
 
   }
-  getAllContacts() async {
-    List<Contact> _contacts = (await databaseHelper.fetchContact());
-    setState(() {
-      //contacts =_contacts;
-    });
-  }
-
-
+ void filterContact(value){
+    //print(listContact.where((xxx) => xxx.name=='tilak').toList(););
+   setState(() {
+     filteredContact = listContact.where((contact) => contact.name.toLowerCase().contains(value.toLowerCase())).toList();
+    // filteredContact = listContact.where((xxx) => xxx.name=='tilak khatri').toList();
+   });
+    }
   void dispose() {
-    searchController.removeListener(filterContacts);
+  //  searchController.removeListener(onSearchChanged);
     searchController.dispose();
     myFocusNode.dispose();
     super.dispose();
   }
 
+  onSearchChanged(){
+    print(searchController.text);
+  }
 
-
-  // void searchQuery(String userInput){
+// void searchQuery(String userInput){
   //       userInput = searchController.text;
   //       if(userInput.isEmpty){
   //         return;
@@ -85,6 +78,13 @@ class _State extends State<MainMenu> {
   //         userSearchInput = userInput;
   //       }
   // }
+
+
+
+
+
+
+
 
 
   //shows dialog before deleting
@@ -125,7 +125,7 @@ class _State extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-  bool isSearching = searchController.text.isNotEmpty;
+  //bool isSearching = searchController.text.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: 40,
@@ -186,9 +186,11 @@ class _State extends State<MainMenu> {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: isSearching ==true? contactsFiltered.length : contacts.length,
+      //isSearching ==true? contactsFiltered.length :
+      // isSearching ==true? contactsFiltered.length :
+      itemCount: filteredContact.length,
       itemBuilder: (BuildContext context, int position) {
-        var contact = isSearching ==true? contactsFiltered.length :contacts[position];
+        var contact =filteredContact[position];
         return Card(
           color: Colors.white,
           elevation: 2.0,
@@ -230,12 +232,10 @@ class _State extends State<MainMenu> {
           LengthLimitingTextInputFormatter(20),
         ],
         controller: searchController,
-        // onChanged: (String){
-        //   setState(() {
-        //     searchQuery(searchController.text);
-        //   });
-        // },
         focusNode: myFocusNode,
+        onChanged: (value){
+          filterContact(value);
+        },
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 20,
